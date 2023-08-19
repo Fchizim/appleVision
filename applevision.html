@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+*,
+*::after,
+*::before{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html, body{
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+.parallax{
+    width: 100%;
+    height: 100%;
+}
+.parallax img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: bottom;
+}
+.parallax > img{
+    filter: blur(2px);
+}
+.agumented-ui{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.agumented-ui .icons{
+    display: flex;
+    flex-direction: column;
+    gap: 3.5rem;
+}
+.agumented-ui .icons .row{
+    display: flex;
+    justify-content: center;
+    gap: 3.5rem;
+}
+.agumented-ui .icons .row .app{
+    width: 6rem;
+    height: 6rem;
+    border-radius: 50%;
+    background: #ccc;
+    box-shadow: 2px 2px 8px #777, inset 2px 2px 8px #eee;
+    padding: 1rem;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: transform 0.4s ease;
+}
+.agumented-ui .icons .row .app:hover{
+    transform: scale(1.3);
+}
+.agumented-ui .icons .row .app img{
+    width: 4rem;
+    height: 4rem;
+}
+@media only screen and (max-width: 600px){
+    .agumented-ui .icons .row .app{
+        width: 5rem;
+        height: 5rem;
+    }
+    .agumented-ui .icons .row .app img{
+        width: 3rem;
+        height: 3rem;
+    }
+}
+</style>
+<body>
+    <main id="parallax" class="parallax">
+        <img src="https://source.unsplash.com/4-7s995Kv1U"/>
+        <div class="agumented-ui">
+          <div class="ui">
+            <div class="icons">
+              <div class="row">
+                <div class="app">
+                    <img alt="notes" src="https://kingudakuix.github.io/assets/assets/icons/notes.png"></img>
+                </div>
+                <div class="app">
+                    <img alt="store" src="https://kingudakuix.github.io/assets/assets/icons/app-store.png"></img>
+                </div>
+              </div>
+              <div class="row">
+                <div class="app">
+                    <img alt="apple-tv" src="https://kingudakuix.github.io/assets/assets/icons/apple-tv.png"></img>
+                </div>
+                <div class="app">
+                    <img alt="music" src="https://kingudakuix.github.io/assets/assets/icons/music.png"></img>
+                </div>
+                <div class="app">
+                    <img alt="photos" src="https://kingudakuix.github.io/assets/assets/icons/photos.png"></img>
+                </div>
+              </div>
+              <div class="row">
+                <div class="app">
+                    <img alt="safari" src="https://kingudakuix.github.io/assets/assets/icons/safari.png"></img>
+                </div>
+                <div class="app">
+                    <img alt="settings" src="https://kingudakuix.github.io/assets/assets/icons/settings.png"></img>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+</body>
+hi
+<script>
+    const parallax = document.getElementById("parallax");
+const rect = parallax.getBoundingClientRect();
+const icons = document.getElementsByClassName("ui")[0];
+const iconsRect = icons.getBoundingClientRect();
+
+var pos = {
+    x:0,
+    y:0
+};
+var mousePos = {
+    x: 0,
+    y:0
+}
+var iconPos = {
+    x: 0,
+    y:0
+}
+var iconDesiredPos = {
+    x: 0,
+    y:0
+}
+parallax.addEventListener("pointermove", function (e) {
+    mousePos = {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    };
+      
+    iconDesiredPos = {
+      x: (e.clientX - window.innerWidth / 2) - iconsRect.left,
+      y: (e.clientY - window.innerHeight / 2) - iconsRect.top
+    }
+  });
+function render(){
+    pos.x += easing(pos.x, mousePos.x, 0.01);
+    pos.y += easing(pos.y, mousePos.y, 0.01);
+    parallax.style.transformOrigin = `${pos.x}px ${pos.y}px`;
+    parallax.style.transform = `scale(1.25)`;
+
+    iconPos.x += easing(iconPos.x, iconDesiredPos.x / -10, 0.01);
+    iconPos.y += easing(iconPos.y, iconDesiredPos.y / -10, 0.01);
+    icons.style.transform = `translateX(${iconPos.x}px) translateY(${iconPos.y}px)`;
+
+    requestAnimationFrame(render);
+}
+render();
+function easing(a, b, speed){
+    return (b-a) * speed;
+}
+</script>
+</html>
